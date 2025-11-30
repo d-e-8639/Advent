@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Text;
+using HelloWorld.lib;
 
 namespace HelloWorld.A2024
 {

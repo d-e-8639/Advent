@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace HelloWorld
+namespace HelloWorld.lib
 {
     public class Grid<T> : IEnumerable<GridItem<T>>
-        where T: class
+        //where T: class
     {
         public List<List<GridItem<T>>> Items;
 
@@ -90,30 +90,53 @@ namespace HelloWorld
         }
     }
 
+    public enum GridDirection {
+        Left,
+        Up,
+        Right,
+        Down
+    }
+
     public interface IGridRegisterable<T>
-        where T: class
+        //where T: class
     {
         void Register(GridItem<T> gridItem);
     }
 
     public interface IGridDeregisterable<T>
-        where T: class
+        //where T: class
     {
         void Deregister();
     }
 
     public class GridItem<T>
-        where T: class
+    //where T: class
     {
         public Grid<T> Parent;
         public int X, Y;
         public T Item;
 
-        public GridItem<T> Up=null, Down=null, Left=null, Right=null;
+        public GridItem<T> Up = null, Down = null, Left = null, Right = null;
         public bool HasUp { get { return Up != null; } }
         public bool HasDown { get { return Down != null; } }
         public bool HasLeft { get { return Left != null; } }
         public bool HasRight { get { return Right != null; } }
+
+        public GridItem<T> Neighbor(GridDirection gd) {
+            if ((gd == GridDirection.Up) && HasUp) {
+                return Up;
+            }
+            else if ((gd == GridDirection.Right) && HasRight) {
+                return Right;
+            }
+            else if ((gd == GridDirection.Down) && HasDown) {
+                return Down;
+            }
+            else if ((gd == GridDirection.Left) && HasLeft) {
+                return Left;
+            }
+            else return null;
+        }
 
         private GridItem<T>[] neighbors = null;
         public IEnumerable<GridItem<T>> Neighbors {
@@ -130,8 +153,7 @@ namespace HelloWorld
             }
         }
 
-        public GridItem(Grid<T> grid, T item, int x, int y)
-        {
+        public GridItem(Grid<T> grid, T item, int x, int y) {
             this.Parent = grid;
             this.Item = item;
             this.X = x;
@@ -152,12 +174,12 @@ namespace HelloWorld
             }
         }
 
-        public void Move(GridItem<T> target, bool overwrite=false) {
-            if (! ReferenceEquals(this.Parent, target.Parent)) {
+        public void Move(GridItem<T> target, bool overwrite = false) {
+            if (!ReferenceEquals(this.Parent, target.Parent)) {
                 throw new Exception("Moving to a different grid!??!?");
             }
 
-            if (! target.IsEmpty()) {
+            if (!target.IsEmpty()) {
                 if (overwrite) {
                     target.deregisterItem();
                 }
@@ -172,7 +194,7 @@ namespace HelloWorld
         }
 
         public void Swap(GridItem<T> target) {
-            if (! ReferenceEquals(this.Parent, target.Parent)) {
+            if (!ReferenceEquals(this.Parent, target.Parent)) {
                 throw new Exception("Moving to a different grid!??!?");
             }
 
@@ -189,22 +211,27 @@ namespace HelloWorld
             return this.Item == null;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return ToString("");
         }
 
-        public string ToString(string nullItemToStringValue)
-        {
+        public string ToString(string nullItemToStringValue) {
             if (Item != null) {
                 return Item.ToString();
             }
             return nullItemToStringValue;
         }
+
+        public static bool operator ==(GridItem<T> a, GridItem<T> b) {
+            return ReferenceEquals(a, b);
+        }
+        public static bool operator !=(GridItem<T> a, GridItem<T> b) {
+            return !ReferenceEquals(a, b);
+        }
     }
 
     public class GridEnumerator<T> : IEnumerator<GridItem<T>>
-        where T: class
+        //where T: class
     {
         private Grid<T> grid;
         private IEnumerator<List<GridItem<T>>> rowEnum = null;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
+using HelloWorld.lib;
 
 namespace HelloWorld.A2024
 {

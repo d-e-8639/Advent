@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.IO;
 
 namespace HelloWorld
 {
@@ -10,15 +11,9 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
-            DateTime expire = new DateTime(2025, 04, 30, 0, 5, 0, DateTimeKind.Utc);
-            DateTime thirtyBefore = expire.AddDays(-30);
-            TimeZoneInfo sydneyTZ = TimeZoneInfo.GetSystemTimeZones().Where(tz => tz.DisplayName.Contains("Sydney")).Single();
-            DateTime sydneyRenew = TimeZoneInfo.ConvertTime(thirtyBefore, sydneyTZ);
-            
-            Console.WriteLine(sydneyRenew.ToString("o", CultureInfo.InvariantCulture));
-
-
-            //A2024.Advent15.Do("C:/src/HelloWorld/2024/");
+            string currentDir = Directory.GetCurrentDirectory();
+            currentDir = currentDir.Substring(0, currentDir.LastIndexOf("bin\\"));
+            A2024.Advent16.Do(currentDir + "2024/");
             //A2023.Advent19.Do();
         }
     }

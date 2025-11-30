@@ -1,4 +1,4 @@
-namespace HelloWorld.A2024
+namespace HelloWorld.lib
 {
     public class Point {
         public int X, Y;
