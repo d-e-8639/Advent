@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Diagnostics;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent9
     {

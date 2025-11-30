@@ -3,12 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using HelloWorld.A2023;
+using Advent.A2023;
 using System.Numerics;
 using System.Xml;
 using System.Text;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent13
     {

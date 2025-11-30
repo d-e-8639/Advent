@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Text;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent11
     {

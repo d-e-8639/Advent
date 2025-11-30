@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace HelloWorld.lib
+namespace Advent.lib
 {
     public class Grid<T> : IEnumerable<GridItem<T>>
         //where T: class

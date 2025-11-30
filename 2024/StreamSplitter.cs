@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
 
     public static class SplitExentsion {

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Data;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent12
     {

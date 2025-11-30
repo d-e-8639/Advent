@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent1
     {

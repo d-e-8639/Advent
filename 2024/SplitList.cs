@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 
-namespace HelloWorld.A2023
+namespace Advent.A2023
 {
     public static class SplitList
     {

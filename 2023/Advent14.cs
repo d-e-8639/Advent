@@ -12,7 +12,7 @@ using System.Security;
 using System.Runtime.Serialization;
 using System.Runtime.Intrinsics.Arm;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent14
     {

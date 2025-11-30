@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent18
     {

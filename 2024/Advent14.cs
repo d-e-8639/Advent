@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
-using HelloWorld.lib;
+using Advent.lib;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent14
     {

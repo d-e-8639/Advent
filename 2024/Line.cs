@@ -1,7 +1,7 @@
-using HelloWorld.lib;
+using Advent.lib;
 using System;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Line {
         public Point Start, End;

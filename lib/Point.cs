@@ -1,4 +1,4 @@
-namespace HelloWorld.lib
+namespace Advent.lib
 {
     public class Point {
         public int X, Y;

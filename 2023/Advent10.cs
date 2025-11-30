@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Runtime.CompilerServices;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent10
     {

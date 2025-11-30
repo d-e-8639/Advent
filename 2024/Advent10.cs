@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using HelloWorld.lib;
+using Advent.lib;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent10
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Metrics;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent16
     {

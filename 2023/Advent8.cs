@@ -7,7 +7,7 @@ using System.Text;
 using System.Collections;
 using System.Numerics;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent8
     {

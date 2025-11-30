@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.IO;
 
-namespace HelloWorld
+namespace Advent
 {
     class Program
     {

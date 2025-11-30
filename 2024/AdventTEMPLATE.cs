@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class AdventTEMPLATE
     {

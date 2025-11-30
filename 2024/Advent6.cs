@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.ComponentModel;
 using System.Text;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent6
     {

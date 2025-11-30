@@ -7,9 +7,9 @@ using System.Diagnostics;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Text;
-using HelloWorld.lib;
+using Advent.lib;
 
-namespace HelloWorld.A2024
+namespace Advent.A2024
 {
     public class Advent12
     {

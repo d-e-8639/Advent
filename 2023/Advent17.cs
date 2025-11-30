@@ -7,7 +7,7 @@ using System.Diagnostics.Tracing;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 
-namespace HelloWorld
+namespace Advent
 {
     public class Advent17
     {
