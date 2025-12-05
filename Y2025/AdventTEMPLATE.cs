@@ -11,10 +11,10 @@ namespace Advent.Y2025
     {
         public static void Do(string wd){
             string file;
-            using (StreamReader sr = new StreamReader(wd + "AdventTEMPLATE.txt")) {
+            using (StreamReader sr = new StreamReader(wd + "AdventTEMPLATEsample.txt")) {
                 file = sr.ReadToEnd();
             }
-            string[] lines = file.Split(new string[]{"\r\n", "\r", "\n" }, StringSplitOptions.None);
+            string[] lines = file.Split(new string[]{"\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             Stopwatch st1 = new Stopwatch();
             st1.Start();

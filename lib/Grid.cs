@@ -288,10 +288,24 @@ namespace Advent.lib
         }
 
         public static bool operator ==(GridItem<T> a, GridItem<T> b) {
-            return ReferenceEquals(a, b);
+            return a.Equals(b);
         }
         public static bool operator !=(GridItem<T> a, GridItem<T> b) {
-            return !ReferenceEquals(a, b);
+            return !a.Equals(b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return ReferenceEquals(this, obj);
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotSupportedException("Why are you trying to use this in a dictionary?");
         }
     }
 
