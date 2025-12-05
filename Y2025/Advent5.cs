@@ -13,15 +13,15 @@ namespace Advent.Y2025
     {
         public static void Do(string wd){
             string file;
-            using (StreamReader sr = new StreamReader(wd + "Advent5sample.txt")) {
+            using (StreamReader sr = new StreamReader(wd + "Advent5.txt")) {
                 file = sr.ReadToEnd();
             }
             string[] lines = file.Split(new string[]{"\r\n", "\r", "\n" }, StringSplitOptions.None);
 
             List<List<string>> sLines = lines.SplitBy("", true, false).ToList();
 
-            List<int[]> freshIds = sLines[0].Select(l => l.Split('-').Select(i => int.Parse(i)).ToArray()).ToList();
-            List<int> ingredients = sLines[1].Select(l => int.Parse(l)).ToList();
+            List<long[]> freshIds = sLines[0].Select(l => l.Split('-').Select(i => long.Parse(i)).ToArray()).ToList();
+            List<long> ingredients = sLines[1].Select(l => long.Parse(l)).ToList();
 
             Stopwatch st1 = new Stopwatch();
             st1.Start();
@@ -37,12 +37,12 @@ namespace Advent.Y2025
 
         }
 
-        private static void task1(List<int[]> freshIds, List<int> ingredients)
+        private static void task1(List<long[]> freshIds, List<long> ingredients)
         {
-            HashSet<int> freshCount = new HashSet<int>();
-            foreach(int ingredient in ingredients)
+            HashSet<long> freshCount = new HashSet<long>();
+            foreach(long ingredient in ingredients)
             {
-                foreach (int[] freshIdRange in freshIds)
+                foreach (long[] freshIdRange in freshIds)
                 {
                     if (ingredient >= freshIdRange[0] && ingredient <= freshIdRange[1])
                     {
@@ -53,7 +53,28 @@ namespace Advent.Y2025
             Console.WriteLine("Count: " + freshCount.Count());
         }
 
-        private static void task2(List<int[]> freshIds, List<int> ingredients) {
+        private static void task2(List<long[]> freshIds, List<long> ingredients) {
+            LinkedList<long[]> mergeList = new LinkedList<long[]>(freshIds.OrderBy(x => x[0]));
+
+            for (LinkedListNode<long[]> i = mergeList.First; i != mergeList.Last && i != null; i = i.Next) {
+                bool removed=true;
+                while (removed) {
+                    removed = false;
+                    for (LinkedListNode<long[]> j = i.Next; j != null; j = j.Next) {
+                        if (i.Value[1] >= j.Value[0]) {
+                            // ranges overlap
+                            i.Value[1] = Math.Max(i.Value[1], j.Value[1]);
+                            mergeList.Remove(j);
+                            removed = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine(string.Join("\r\n", mergeList.Select(range => range[0].ToString() + "-" + range[1].ToString())));
+
+            Console.WriteLine("all fresh id count:" + mergeList.Select(range => range[1] - range[0] + 1).Sum());
         }
 
     }

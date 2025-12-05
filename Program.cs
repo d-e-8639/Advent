@@ -15,7 +15,7 @@ namespace Advent
             //currentDir = currentDir.Substring(0, currentDir.LastIndexOf("bin\\"));
             //A2024.Advent16.Do(currentDir + "2024/");
             //A2023.Advent19.Do();
-            Y2025.Advent4.Do(currentDir+"/Y2025/");
+            Y2025.Advent5.Do(currentDir+"/Y2025/");
         }
     }
 }
