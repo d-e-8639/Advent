@@ -245,7 +245,7 @@ namespace Advent.A2024
             groupedPlots.Add(p.Item.Id);
             g.Add(p);
 
-            foreach (GridItem<Plot> neighbor in p.Neighbors) {
+            foreach (GridItem<Plot> neighbor in p.NeighborsCardinal) {
                 if ((! groupedPlots.Contains(neighbor.Item.Id))
                     &&(neighbor.Item.Plant == p.Item.Plant))
                 {

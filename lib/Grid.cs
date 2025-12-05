@@ -41,7 +41,29 @@ namespace Advent.lib
                     if (y < Items.Count - 1){
                         gi.Down = Items[y+1][x];
                     }
-
+                    // Diagonals
+                    if (gi.HasUp)
+                    {
+                        if (gi.HasLeft)
+                        {
+                            gi.UpLeft = Items[y-1][x-1];
+                        }
+                        if (gi.HasRight)
+                        {
+                            gi.UpRight = Items[y-1][x+1];
+                        }
+                    }
+                    if (gi.HasDown)
+                    {
+                        if (gi.HasLeft)
+                        {
+                            gi.DownLeft = Items[y+1][x-1];
+                        }
+                        if (gi.HasRight)
+                        {
+                            gi.DownRight = Items[y+1][x+1];
+                        }
+                    }
                 }
             }
         }
@@ -122,6 +144,14 @@ namespace Advent.lib
         public bool HasLeft { get { return Left != null; } }
         public bool HasRight { get { return Right != null; } }
 
+        public GridItem<T> UpLeft = null, DownLeft = null, DownRight = null, UpRight = null;
+        public bool HasUpLeft { get { return UpLeft != null; } }
+        public bool HasDownLeft { get { return DownLeft != null; } }
+        public bool HasDownRight { get { return DownRight != null; } }
+        public bool HasUpRight { get { return UpRight != null; } }
+
+
+
         public GridItem<T> Neighbor(GridDirection gd) {
             if ((gd == GridDirection.Up) && HasUp) {
                 return Up;
@@ -138,19 +168,54 @@ namespace Advent.lib
             else return null;
         }
 
-        private GridItem<T>[] neighbors = null;
-        public IEnumerable<GridItem<T>> Neighbors {
+        private GridItem<T>[] neighborsCardinal = null;
+        /// <summary>
+        /// Return the four cardinal neighbors of this point (North, South, East, West)
+        /// </summary>
+        public IEnumerable<GridItem<T>> NeighborsCardinal {
             get {
-                if (neighbors == null) {
+                if (neighborsCardinal == null) {
                     List<GridItem<T>> n = new List<GridItem<T>>();
                     if (Up != null) { n.Add(Up); }
                     if (Down != null) { n.Add(Down); }
                     if (Left != null) { n.Add(Left); }
                     if (Right != null) { n.Add(Right); }
-                    neighbors = n.ToArray();
+                    neighborsCardinal = n.ToArray();
                 }
-                return neighbors;
+                return neighborsCardinal;
             }
+        }
+
+        private GridItem<T>[] neighborsOrdinal = null;
+        /// <summary>
+        /// Return the four intercardinal neighbors of this point (NorthEast, SouthEast, SouthWest, NorthWest)
+        /// </summary>
+        public IEnumerable<GridItem<T>> NeighborsOrdinal
+        {
+            get {
+                if (neighborsOrdinal == null) {
+                    List<GridItem<T>> n = new List<GridItem<T>>();
+                    if (UpLeft != null) { n.Add(UpLeft); }
+                    if (DownLeft != null) { n.Add(DownLeft); }
+                    if (DownRight != null) { n.Add(DownRight); }
+                    if (UpRight != null) { n.Add(UpRight); }
+                    neighborsOrdinal = n.ToArray();
+                }
+                return neighborsOrdinal;
+            }
+        }
+
+        private GridItem<T>[] neighborsCardinalAndOrdinal = null;
+        /// <summary>
+        /// Return the eight cardinal and intercardinal neighbors of this point (North, South, East, West, NorthEast, SouthEast, SouthWest, NorthWest)
+        /// </summary>
+        public IEnumerable<GridItem<T>> NeighborsCardinalAndOrdinal ()
+        {
+            if (neighborsCardinalAndOrdinal == null)
+            {
+                neighborsCardinalAndOrdinal = NeighborsCardinal.Concat(NeighborsOrdinal).ToArray();
+            }
+            return neighborsCardinalAndOrdinal;
         }
 
         public GridItem(Grid<T> grid, T item, int x, int y) {
