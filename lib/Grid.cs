@@ -288,10 +288,10 @@ namespace Advent.lib
         }
 
         public static bool operator ==(GridItem<T> a, GridItem<T> b) {
-            return a.Equals(b);
+            return ReferenceEquals(a, b);
         }
         public static bool operator !=(GridItem<T> a, GridItem<T> b) {
-            return !a.Equals(b);
+            return !ReferenceEquals(a, b);
         }
 
         public override bool Equals(object obj)

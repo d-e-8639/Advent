@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Advent": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\src\\Advent\\"
+    }
+  }
+}

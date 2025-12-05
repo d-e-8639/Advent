@@ -12,7 +12,7 @@ namespace Advent.Y2025
     {
         public static void Do(string wd){
             string file;
-            using (StreamReader sr = new StreamReader(wd + "Advent4sample.txt")) {
+            using (StreamReader sr = new StreamReader(wd + "Advent4.txt")) {
                 file = sr.ReadToEnd();
             }
             string[] lines = file.Split(new string[]{"\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -56,6 +56,31 @@ namespace Advent.Y2025
         }
 
         private static void task2(List<List<WarehouseContent>> warehouseContents) {
+            Grid<WarehouseContent> grid = new Grid<WarehouseContent>(warehouseContents);
+            int removed = 0;
+            int removedTotal=0;
+
+            while ((removed = remove(grid)) != 0) {
+                removedTotal += removed;
+                Console.WriteLine("removed " + removed);
+            }
+
+            Console.WriteLine("Accessible count: " + removedTotal);
+        }
+
+        private static int remove(Grid<WarehouseContent> grid) {
+            List<GridItem<WarehouseContent>> removals = new List<lib.GridItem<WarehouseContent>>();
+            foreach (GridItem<WarehouseContent> i in grid) {
+                if (i.Item == WarehouseContent.Paper && i.NeighborsCardinalAndOrdinal().Where(n => n.Item == WarehouseContent.Paper).Count() < 4) {
+                    removals.Add(i);
+                }
+            }
+            foreach (GridItem<WarehouseContent> i in removals) {
+                i.Item = WarehouseContent.Empty;
+            }
+
+            return removals.Count;
+
         }
 
     }
