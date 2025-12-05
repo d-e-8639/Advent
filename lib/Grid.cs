@@ -136,7 +136,20 @@ namespace Advent.lib
     {
         public Grid<T> Parent;
         public int X, Y;
-        public T Item;
+
+        private T _item;
+        public T Item {
+            get {
+                return _item;
+            }
+            set {
+                if (!IsEmpty()) {
+                    deregisterItem();
+                }
+                _item = value;
+                registerItem();
+            }
+        }
 
         public GridItem<T> Up = null, Down = null, Left = null, Right = null;
         public bool HasUp { get { return Up != null; } }
@@ -188,7 +201,7 @@ namespace Advent.lib
 
         private GridItem<T>[] neighborsOrdinal = null;
         /// <summary>
-        /// Return the four intercardinal neighbors of this point (NorthEast, SouthEast, SouthWest, NorthWest)
+        /// Return the four ordinal (intercardinal) neighbors of this point (NorthEast, SouthEast, SouthWest, NorthWest)
         /// </summary>
         public IEnumerable<GridItem<T>> NeighborsOrdinal
         {
@@ -207,7 +220,7 @@ namespace Advent.lib
 
         private GridItem<T>[] neighborsCardinalAndOrdinal = null;
         /// <summary>
-        /// Return the eight cardinal and intercardinal neighbors of this point (North, South, East, West, NorthEast, SouthEast, SouthWest, NorthWest)
+        /// Return the eight cardinal and ordinal (intercardinal) neighbors of this point (North, South, East, West, NorthEast, SouthEast, SouthWest, NorthWest)
         /// </summary>
         public IEnumerable<GridItem<T>> NeighborsCardinalAndOrdinal ()
         {
@@ -223,8 +236,6 @@ namespace Advent.lib
             this.Item = item;
             this.X = x;
             this.Y = y;
-
-            registerItem();
         }
 
         private void registerItem() {
@@ -244,18 +255,12 @@ namespace Advent.lib
                 throw new Exception("Moving to a different grid!??!?");
             }
 
-            if (!target.IsEmpty()) {
-                if (overwrite) {
-                    target.deregisterItem();
-                }
-                else {
-                    throw new Exception("Can't move this GridItem to target, target GridItem is not null.");
-                }
+            if (!target.IsEmpty() && !overwrite) {
+                throw new Exception("Can't move this GridItem to target, target GridItem is not empty.");
             }
 
             target.Item = this.Item;
             this.Item = default;
-            target.registerItem();
         }
 
         public void Swap(GridItem<T> target) {
@@ -266,12 +271,13 @@ namespace Advent.lib
             T tmp = target.Item;
 
             target.Item = this.Item;
-            target.registerItem();
 
             this.Item = tmp;
-            this.registerItem();
         }
 
+        /// <summary>
+        /// Note, if the Grid item type is value type, this will always return false
+        /// </summary>
         public bool IsEmpty() {
             return this.Item == null;
         }
