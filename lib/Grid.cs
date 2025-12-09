@@ -110,6 +110,24 @@ namespace Advent.lib
             }
             return sb.ToString();
         }
+
+        public enum GetItemsOrder
+        {
+            TopLeftToBottomRight,
+            BottomRightToTopLeft
+
+        }
+
+        public IEnumerable<T> GetItems(GetItemsOrder order=GetItemsOrder.TopLeftToBottomRight) {
+            if (order == GetItemsOrder.TopLeftToBottomRight) {
+                return this.Select(gi => gi.Item);
+            }
+            else if (order == GetItemsOrder.BottomRightToTopLeft) {
+                return this.Select(gi => gi.Item).Reverse();
+            }
+
+            throw new NotSupportedException("That sort order is not supported");
+        }
     }
 
     public enum GridDirection {
