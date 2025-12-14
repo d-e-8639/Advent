@@ -1,10 +1,11 @@
+using Advent.A2024;
 using System;
 
 namespace Advent.lib
 {
     public class Point3D {
-        public int X, Y, Z;
-        public Point3D(int x, int y, int z){
+        public long X, Y, Z;
+        public Point3D(long x, long y, long z) {
             X = x;
             Y = y;
             Z = z;
@@ -14,16 +15,16 @@ namespace Advent.lib
             return $"({X},{Y},{Z})";
         }
 
-        public Point Add(int x,int y) {
-            return new Point(X + x, Y + y);
+        public Point3D Add(long x, long y, long z) {
+            return new Point3D(X + x, Y + y, Z + z);
         }
 
         public double Distance(Point3D other)
         {
             double dist = Math.Sqrt(
-                (long)(other.X - this.X)*(long)(other.X - this.X) +
-                (long)(other.Y - this.Y)*(long)(other.Y - this.Y) +
-                (long)(other.Z - this.Z)*(long)(other.Z - this.Z)
+                (other.X - this.X)*(other.X - this.X) +
+                (other.Y - this.Y)*(other.Y - this.Y) +
+                (other.Z - this.Z)*(other.Z - this.Z)
             );
             return dist;
         }
@@ -53,9 +54,9 @@ namespace Advent.lib
         public override int GetHashCode()
         {
             int hash = 23;
-            hash = hash * 31 + X;
-            hash = hash * 31 + Y;
-            hash = hash * 31 + Z;
+            hash = hash * 31 + (int)X;
+            hash = hash * 31 + (int)Y;
+            hash = hash * 31 + (int)Z;
             return hash;
         }
     }

@@ -28,10 +28,16 @@ namespace Advent.lib
         }
 
         public static bool operator ==(Point a, Point b) {
+            if (object.ReferenceEquals(null, a))
+                return object.ReferenceEquals(null, b);
+
             return a.Equals(b);
         }
 
         public static bool operator !=(Point a, Point b) {
+            if (object.ReferenceEquals(null, a))
+                return !object.ReferenceEquals(null, b);
+
             return ! a.Equals(b);
         }
 
