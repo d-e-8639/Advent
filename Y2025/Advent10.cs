@@ -35,23 +35,74 @@ namespace Advent.Y2025
 
         }
 
-        private static void task1(List<Machine> machines) {
+        private static void task1(List<Machine> machines)
+        {
+
+            // only press each button once!
+
+            // foreach(Machine m in machines)
+            // {
+            //     bool[] indicators = Enumerable.Repeat(false, m.TargetIndicatorPattern.Length).ToArray();
+            //     Stack<int> buttonSequence = new Stack<int>();
+            //     List<int[]> successSequences = new List<int[]>();
+            //     for (int presses=0; successSequences.Count == 0; presses++)
+            //     {
+            //         m.PressButtons(presses, indicators, buttonSequence, successSequences);
+            //     }
+
+            //     foreach (int[] successSeq in successSequences)
+            //     {
+            //         Console.WriteLine("Successful button sequence: " + string.Join(",", successSeq.Select(i => "(" + string.Join(",", m.Buttons[i].Select(j => j.ToString())) + ")" )));
+            //     }
+            // }
         }
 
         public class Machine
         {
             public bool[] TargetIndicatorPattern;
-            public bool[] Indicators;
-            public List<List<int>> Wiring;
+            //public bool[] Indicators;
+            public List<List<int>> Buttons;
             public List<int> Joltage;
 
             private Machine() {}
 
-            public void Press(int ButtonNumber)
+
+            private void _flipBits(int ButtonNumber, bool[] indicators)
             {
-                foreach (int n in Wiring[ButtonNumber])
+                foreach (int n in Buttons[ButtonNumber])
                 {
-                    
+                    indicators[n] = !indicators[n];
+                }
+            }
+
+            private void Press(int ButtonNumber, bool[] indicators, Stack<int> buttonSequence)
+            {
+                buttonSequence.Push(ButtonNumber);
+                _flipBits(ButtonNumber, indicators);
+            }
+
+            private void UndoPress(int ButtonNumber, bool[] indicators, Stack<int> buttonSequence)
+            {
+                _flipBits(ButtonNumber, indicators);
+                buttonSequence.Pop();
+            }
+
+            public void PressButtons(int presses, bool[] indicators, Stack<int> buttonSequence, List<int[]> successSequences)
+            {
+                if (presses == 0)
+                {
+                    if (TargetIndicatorPattern.SequenceEqual(indicators))
+                    {
+                        successSequences.Add(buttonSequence.ToArray());
+                    }
+                    return;
+                }
+
+                for (int i=0; i < Buttons.Count; i++)
+                {
+                    Press(i, indicators, buttonSequence);
+                    PressButtons(presses - 1, indicators, buttonSequence, successSequences);
+                    UndoPress(i, indicators, buttonSequence);
                 }
             }
 
@@ -68,12 +119,12 @@ namespace Advent.Y2025
                     if (part.StartsWith("["))
                     {
                         m.TargetIndicatorPattern = part.Trim(['[', ']']).Select(HardCodedConverter.Factory(('.', false), ('#', true))).ToArray();
-                        m.Indicators = new bool[m.TargetIndicatorPattern.Length];
+                        //m.Indicators = new bool[m.TargetIndicatorPattern.Length];
                     }
                     else if (part.StartsWith("("))
                     {
-                        if (m.Wiring == null) {m.Wiring = new List<List<int>>();}
-                        m.Wiring.Add(part.Trim(['(', ')']).Split(',').Select(i => int.Parse(i)).ToList());
+                        if (m.Buttons == null) {m.Buttons = new List<List<int>>();}
+                        m.Buttons.Add(part.Trim(['(', ')']).Split(',').Select(i => int.Parse(i)).ToList());
                     }
                     else if (part.StartsWith("{"))
                     {
