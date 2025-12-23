@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Net.NetworkInformation;
 using Advent.lib;
 
 namespace Advent.Y2025
@@ -13,7 +12,7 @@ namespace Advent.Y2025
     {
         public static void Do(string wd){
             string file;
-            using (StreamReader sr = new StreamReader(wd + "Advent10sample.txt")) {
+            using (StreamReader sr = new StreamReader(wd + "Advent10.txt")) {
                 file = sr.ReadToEnd();
             }
             string[] lines = file.Split(new string[]{"\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -37,25 +36,54 @@ namespace Advent.Y2025
 
         private static void task1(List<Machine> machines)
         {
+            // only press each button once, and order is not important! We need a choose algorithm.
 
-            // only press each button once!
+            int fewestCount=0;
 
-            // foreach(Machine m in machines)
-            // {
-            //     bool[] indicators = Enumerable.Repeat(false, m.TargetIndicatorPattern.Length).ToArray();
-            //     Stack<int> buttonSequence = new Stack<int>();
-            //     List<int[]> successSequences = new List<int[]>();
-            //     for (int presses=0; successSequences.Count == 0; presses++)
-            //     {
-            //         m.PressButtons(presses, indicators, buttonSequence, successSequences);
-            //     }
+            foreach(Machine m in machines)
+            {
+                bool[] indicators = Enumerable.Repeat(false, m.TargetIndicatorPattern.Length).ToArray();
 
-            //     foreach (int[] successSeq in successSequences)
-            //     {
-            //         Console.WriteLine("Successful button sequence: " + string.Join(",", successSeq.Select(i => "(" + string.Join(",", m.Buttons[i].Select(j => j.ToString())) + ")" )));
-            //     }
-            // }
+                Stack<int> buttonSequence = new Stack<int>();
+                List<int[]> successSequences = new List<int[]>();
+
+                for (int presses=0; successSequences.Count == 0; presses++)
+                {
+                    m.PressButtonsOnceEach(0, indicators, buttonSequence, successSequences);
+                }
+
+                Console.WriteLine(m.ToString());
+                foreach (int[] successSeq in successSequences)
+                {
+                    Console.WriteLine("Successful button sequence: " + string.Join(",", successSeq.Select(i => "(" + string.Join(",", m.Buttons[i].Select(j => j.ToString())) + ")" )));
+                }
+
+                fewestCount += successSequences.Select(seq => seq.Length).Min();
+            }
+
+            Console.WriteLine("Fewest Total Buttons: " + fewestCount);
         }
+
+        // private static void task1_permutations(List<Machine> machines)
+        // {
+        //     // Solve task 1 using permuations, which is the wrong way.
+        //     foreach(Machine m in machines)
+        //     {
+        //         bool[] indicators = Enumerable.Repeat(false, m.TargetIndicatorPattern.Length).ToArray();
+        //         Stack<int> buttonSequence = new Stack<int>();
+        //         List<int[]> successSequences = new List<int[]>();
+        //         for (int presses=0; successSequences.Count == 0; presses++)
+        //         {
+        //             m.PressButtonsPermutations(presses, indicators, buttonSequence, successSequences);
+        //         }
+
+        //         foreach (int[] successSeq in successSequences)
+        //         {
+        //             Console.WriteLine("Successful button sequence: " + string.Join(",", successSeq.Select(i => "(" + string.Join(",", m.Buttons[i].Select(j => j.ToString())) + ")" )));
+        //         }
+        //     }
+        // }
+
 
         public class Machine
         {
@@ -77,6 +105,10 @@ namespace Advent.Y2025
 
             private void Press(int ButtonNumber, bool[] indicators, Stack<int> buttonSequence)
             {
+                if (buttonSequence.Count(i => i == ButtonNumber) > 1) {
+                    throw new Exception("never should press twice!");
+                }
+
                 buttonSequence.Push(ButtonNumber);
                 _flipBits(ButtonNumber, indicators);
             }
@@ -87,24 +119,54 @@ namespace Advent.Y2025
                 buttonSequence.Pop();
             }
 
-            public void PressButtons(int presses, bool[] indicators, Stack<int> buttonSequence, List<int[]> successSequences)
+            public void PressButtonsOnceEach(int startIndex, bool[] indicators, Stack<int> buttonSequence, List<int[]> successSequences)
             {
-                if (presses == 0)
+                if (TargetIndicatorPattern.SequenceEqual(indicators))
                 {
-                    if (TargetIndicatorPattern.SequenceEqual(indicators))
-                    {
-                        successSequences.Add(buttonSequence.ToArray());
-                    }
+                    successSequences.Add(buttonSequence.ToArray());
+                }
+
+                if (buttonSequence.Count == Buttons.Count)
+                {
                     return;
                 }
 
-                for (int i=0; i < Buttons.Count; i++)
+                for (int i=startIndex; i < Buttons.Count; i++)
                 {
                     Press(i, indicators, buttonSequence);
-                    PressButtons(presses - 1, indicators, buttonSequence, successSequences);
+                    PressButtonsOnceEach(i + 1, indicators, buttonSequence, successSequences);
                     UndoPress(i, indicators, buttonSequence);
                 }
             }
+
+            // private bool testButtons(IEnumerable<int> whichToPress)
+            // {
+            //     bool[] indicators = Enumerable.Repeat(false, TargetIndicatorPattern.Length).ToArray();
+            //     foreach (int buttonId in whichToPress)
+            //     {
+            //         _flipBits(buttonId, indicators);
+            //     }
+            //     return indicators.SequenceEqual(TargetIndicatorPattern);
+            // }
+
+            // public void PressButtonsPermutations(int presses, bool[] indicators, Stack<int> buttonSequence, List<int[]> successSequences)
+            // {
+            //     if (presses == 0)
+            //     {
+            //         if (TargetIndicatorPattern.SequenceEqual(indicators))
+            //         {
+            //             successSequences.Add(buttonSequence.ToArray());
+            //         }
+            //         return;
+            //     }
+
+            //     for (int i=0; i < Buttons.Count; i++)
+            //     {
+            //         Press(i, indicators, buttonSequence);
+            //         PressButtonsPermutations(presses - 1, indicators, buttonSequence, successSequences);
+            //         UndoPress(i, indicators, buttonSequence);
+            //     }
+            // }
 
             public static Machine FromString(string s)
             {
@@ -137,6 +199,15 @@ namespace Advent.Y2025
                 }
                 return m;
             }
+
+            public override string ToString()
+            {
+                string bits = new string(TargetIndicatorPattern.Select(HardCodedConverter.Factory((true, '#'), (false, '.'))).ToArray());
+                string buttons = string.Join(' ', Buttons.Select(b => "(" + string.Join(',', b.Select(i => i.ToString())) + ")"));
+                string joltage = string.Join(',', Joltage.Select(i => i.ToString()));
+                return $"[{bits}] {buttons} {{{joltage}}}";
+            }
+
         }
 
         private static void task2() {
