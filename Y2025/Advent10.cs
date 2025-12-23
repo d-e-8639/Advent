@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Advent.lib;
+using System.Text;
 
 namespace Advent.Y2025
 {
@@ -12,7 +13,7 @@ namespace Advent.Y2025
     {
         public static void Do(string wd){
             string file;
-            using (StreamReader sr = new StreamReader(wd + "Advent10.txt")) {
+            using (StreamReader sr = new StreamReader(wd + "Advent10sample.txt")) {
                 file = sr.ReadToEnd();
             }
             string[] lines = file.Split(new string[]{"\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -27,7 +28,7 @@ namespace Advent.Y2025
 
             Stopwatch st2 = new Stopwatch();
             st2.Start();
-            task2();
+            task2(machines);
             st2.Stop();
 
             Console.WriteLine($"Time 1: {st1.ElapsedMilliseconds}, Time 2: {st2.ElapsedMilliseconds}" );
@@ -168,6 +169,39 @@ namespace Advent.Y2025
             //     }
             // }
 
+            public void JoltageCount(int startIndex, List<List<int>> buttons, int[] joltageCounter, Stack<(List<int>, int)> buttonSequence, List<List<(List<int>, int)>> results)
+            {
+                if (joltageCounter.All(j => j == 0))
+                {
+                    results.Add(buttonSequence.ToList());
+                }
+
+                for (int i=startIndex; i < buttons.Count; i++)
+                {
+                    int presses = buttons[i].Min(b => joltageCounter[b]);
+
+                    if (presses == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach(int joltageIndex in buttons[i])
+                    {
+                        joltageCounter[joltageIndex] -= presses;
+                    }
+                    buttonSequence.Push(new (buttons[i], presses));
+
+                    JoltageCount(i + 1, buttons, joltageCounter, buttonSequence, results);
+
+                    buttonSequence.Pop();
+                    foreach(int joltageIndex in buttons[i])
+                    {
+                        joltageCounter[joltageIndex] += presses;
+                    }
+
+                }
+            }
+
             public static Machine FromString(string s)
             {
                 if (string.IsNullOrEmpty(s))
@@ -210,7 +244,29 @@ namespace Advent.Y2025
 
         }
 
-        private static void task2() {
+        private static void task2(List<Machine> machines)
+        {
+            foreach (Machine m in machines)
+            {
+                List<List<int>> oButtons = m.Buttons.OrderByDescending(b => b.Count).ToList();
+                int[] jCounter = m.Joltage.ToArray();
+                List<List<(List<int>, int)>> results = new List<List<(List<int>, int)>>();
+
+                m.JoltageCount(0, m.Buttons, jCounter, new Stack<(List<int>, int)>(), results);
+
+                Console.WriteLine();
+                Console.WriteLine(m.ToString());
+                foreach (List<(List<int>, int)> solution in results)
+                {
+                    Console.WriteLine(string.Join(',', solution.Select(s => "(" + string.Join(',', s.Item1.Select(i => i.ToString())) + ") " + s.Item2 + " times")));
+                }
+            }
+
+        }
+
+        public class JoltageUnit
+        {
+            
         }
 
     }
